@@ -5,11 +5,11 @@ import java.util.ArrayList;
 
 
 public class BinTree {
-    Node mammal = new Node("Mammal");
-    Node reptile = new Node("Reptile");
-    Node bird = new Node("Bird");
-    Node aquatic = new Node("Aquatic");
-    Node bug = new Node("Bug");
+    Node mammal = new Node("Mammal", true);
+    Node reptile = new Node("Reptile", true);
+    Node bird = new Node("Bird", true);
+    Node aquatic = new Node("Aquatic Animal", true);
+    Node bug = new Node("Bug", true);
 
     private Node node;
 
@@ -64,6 +64,23 @@ public class BinTree {
 
         nodes.add(bug);
         aquatic.setRight(bug);
+    }
+
+    public void test(){
+        for(int i = 0; i < nodes.size(); i++){
+            System.out.println("Node: " + nodes.get(i).getNodeData());
+
+            if(nodes.get(i).getLeft() != null)
+                System.out.println("\tLeft: " + nodes.get(i).getLeft().getNodeData());
+            else
+                System.out.println("\tLeft: Null");
+
+            if(nodes.get(i).getRight() != null)
+                System.out.println("\tRight: " + nodes.get(i).getRight().getNodeData());
+            else
+                System.out.println("\tRight: Null");
+
+        }
     }
 }
 

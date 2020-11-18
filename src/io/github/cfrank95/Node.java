@@ -6,10 +6,12 @@ public class Node {
     private String data;
     private Node left;
     private Node right;
+    final private boolean isCategory;
 
-    Node(String data){
+    Node(String data, boolean isCategory){
         this.data = data;
         this.question = null;
+        this.isCategory = isCategory;
         left = null;
         right = null;
     }
@@ -50,4 +52,17 @@ public class Node {
     public String getQuestion(){
         return question;
     }
+
+    public boolean getIsCategory() {
+        return isCategory;
+    }
+
+    public boolean isTail(){
+        if (getLeft() == null && getRight() == null){
+            return true;
+        }
+        else
+            return false;
+    }
+
 }
