@@ -5,52 +5,30 @@ import java.util.ArrayList;
 
 
 public class BinTree {
-    Node mammal = new Node("Mammal", true);
-    Node reptile = new Node("Reptile", true);
-    Node bird = new Node("Bird", true);
-    Node aquatic = new Node("Aquatic Animal", true);
-    Node bug = new Node("Bug", true);
-
-    private Node node;
+    Node mammal = new Node("Is it a mammal?", true);
+    Node reptile = new Node("Is it a reptile?", true);
+    Node bird = new Node("Is it a bird?", true);
+    Node aquatic = new Node("Is it an aquatic animal?", true);
+    Node bug = new Node("Is it a bug?", true);
 
     ArrayList<Node> nodes;
 
-    public BinTree() throws IOException {
+    public BinTree(){
         nodes = new ArrayList<>();
         initializeTree();
     }
 
-    public boolean isEmpty(){
-        return mammal == null;
-    }
 
-    public int countNodes(){
+    public int countNodes() {
         return nodes.size();
     }
 
-    public Node getNode(int nodePos){
+    public Node getNode(int nodePos) {
         return nodes.get(nodePos);
     }
 
-    public void setNode(Node node){
-        this.node = node;
-    }
 
-    private void initializeTree() throws IOException {
-//        FileReader reader = new FileReader("src/res/nodelist.txt");
-//        BufferedReader bufferedReader = new BufferedReader(reader);
-//
-//
-//        StringBuilder sb = new StringBuilder();
-//
-//        String nodes;
-//        while((nodes = bufferedReader.readLine() != null){
-//
-//            sb.append(nodes);
-//            sb.append(System.lineSeparator());
-//
-//            tree.add(new Node(sb));
-//        }
+    private void initializeTree(){
         nodes.add(mammal);
 
         nodes.add(reptile);
@@ -66,17 +44,17 @@ public class BinTree {
         aquatic.setRight(bug);
     }
 
-    public void test(){
-        for(int i = 0; i < nodes.size(); i++){
-            System.out.println("Node: " + nodes.get(i).getNodeData());
+    public void test() {
+        for (Node node : nodes) {
+            System.out.println("Node: " + node.getNodeData());
 
-            if(nodes.get(i).getLeft() != null)
-                System.out.println("\tLeft: " + nodes.get(i).getLeft().getNodeData());
+            if (node.getLeft() != null)
+                System.out.println("\tLeft: " + node.getLeft().getNodeData());
             else
                 System.out.println("\tLeft: Null");
 
-            if(nodes.get(i).getRight() != null)
-                System.out.println("\tRight: " + nodes.get(i).getRight().getNodeData());
+            if (node.getRight() != null)
+                System.out.println("\tRight: " + node.getRight().getNodeData());
             else
                 System.out.println("\tRight: Null");
 

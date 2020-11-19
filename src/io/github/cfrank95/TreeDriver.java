@@ -1,87 +1,116 @@
 package io.github.cfrank95;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TreeDriver {
 
     // begin main()
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         System.out.println("Creating Tree\n");
         BinTree tree = new BinTree();
-        int nodeID = 0;
-        int nextNodeID = 1;
 
         System.out.println("Current number of nodes: " + tree.countNodes() + "\n");
 
         Scanner sc = new Scanner(System.in);
-        String response;
+
         boolean isDone = false;
 
         // Main loop
-        while (!isDone){
+        while (!isDone) {
+            // Keep Track of Nodes
+            int nodeId = 0;
+            int nextNodeID;
+
+            // Differentiate between responses
+            String response;            // Y / N responses
+            String questionResponse;    // Responses to create question nodes (isQuestion == true)
+            String animalResponse;      // Responses to create animal nodes (isQuestion == false)
 
             // Main User Interaction
-            int numYeses = 0;
-            for(int i = 0; tree.nodes.size() > i; i++){
-                System.out.println("Is the animal a(n) " + tree.getNode(i).getNodeData() + "? (Y/N)");
+            while (tree.nodes.size() > nodeId) {
+                if (tree.getNode(nodeId).getIsQuestion())
+                    System.out.println(tree.getNode(nodeId).getNodeData() + " (Y/N)");
+                else {
+                    System.out.println("Is the animal a(n) " + tree.getNode(nodeId).getNodeData() + "? (Y/N)");
+                }
 
                 response = sc.nextLine();
 
-                if(response.equalsIgnoreCase("N")) {
+                // "No" Branch (Right)
+                if (response.equalsIgnoreCase("N")) {
 
-                    nextNodeID = tree.nodes.indexOf(tree.nodes.get(nodeID).getRight());
-                    if (nextNodeID == -1){
+                    // Is branch null?
+                    nextNodeID = tree.nodes.indexOf(tree.nodes.get(nodeId).getRight());
+                    if (nextNodeID == -1) {
                         System.out.println("I don't know.  Tell me what you were thinking of.");
-                        response = sc.nextLine();
-                        tree.nodes.add(new Node(response, false));
+                        animalResponse = sc.nextLine();
 
                         System.out.println("What question could I use to identify that animal?");
-                        response = sc.nextLine();
-                        sc.next();
+                        questionResponse = sc.nextLine();
 
+                        Node question = new Node(questionResponse, true);
+                        tree.nodes.add(question);
+                        tree.nodes.get(nodeId).setRight(question);
 
-                        tree.nodes.get(nextNodeID).setQuestion(response);
+                        nextNodeID = tree.nodes.indexOf(question);
+                        Node animal = new Node(animalResponse, false);
+                        tree.nodes.add(animal);
+                        tree.nodes.get(nextNodeID).setLeft(animal);
+
+                        nodeId = 0;
+
+                        // Continue
+                    } else {
+                        nodeId = tree.nodes.indexOf(tree.nodes.get(nodeId).getRight());
                     }
-                }else if(response.equalsIgnoreCase("Y")){
 
-                    if(tree.nodes.get(nodeID).getLeft() == null && tree.nodes.get(nodeID).isTail()) {
-                        System.out.println("I guessed right!  The animal was a(n) "
-                                + tree.nodes.get(nodeID).getNodeData() + "!\n\n");
+                    // "Yes" Branch (Left)
+                } else if (response.equalsIgnoreCase("Y")) {
+
+                    nextNodeID = tree.nodes.indexOf(tree.nodes.get(nodeId).getLeft());
+                    // Is the next branch a tail extending from a question?
+                    if (nextNodeID == -1 && !tree.nodes.get(nodeId).getIsQuestion()) {
+                        System.out.println("\nI guessed right!  The animal was a(n) "
+                                + tree.nodes.get(nodeId).getNodeData() + "!\n");
                         break;
-
-                    }else if(tree.nodes.get(nodeID).getLeft() == null && !tree.nodes.get(nodeID).isTail()){
+                        // Is the next branch a tail and extending from a question?
+                    } else if (nextNodeID == -1) {
 
                         System.out.println("I'm not sure where to go from here.\n" +
                                 "Could you tell me what you were thinking?");
-                        response = sc.nextLine();
-                        tree.nodes.add(new Node(response, false));
-                        nextNodeID = tree.countNodes() - 1;
-                        tree.nodes.get(nodeID).setLeft(tree.nodes.get(nextNodeID));
+                        animalResponse = sc.nextLine();
 
                         System.out.println("What question could I use to guess this animal?");
-                        response = sc.nextLine();
-                        tree.nodes.get(nextNodeID).setQuestion(response);
+                        questionResponse = sc.nextLine();
+
+                        Node question = new Node(questionResponse, true);
+                        tree.nodes.add(question);
+                        tree.nodes.get(nodeId).setLeft(question);
+
+                        nextNodeID = tree.nodes.indexOf(question);
+                        Node animal = new Node(animalResponse, false);
+                        tree.nodes.add(animal);
+                        tree.nodes.get(nextNodeID).setLeft(animal);
+                        nodeId = 0;
+
+                        // Continue
+                    } else {
+                        nodeId = tree.nodes.indexOf(tree.nodes.get(nodeId).getLeft());
                     }
-
-                    numYeses++;
-                    nextNodeID = tree.nodes.indexOf(tree.nodes.get(nodeID).getLeft());
                 }
-
-                i = nextNodeID - 1;
-                nodeID = nextNodeID;
             }
 
+            // Prompt user to continue
             System.out.println("Would you like to continue? (Y/N)");
             response = sc.nextLine();
-            if (response.equals("N")){
+            if (response.equals("N")) {
                 isDone = true;
             }
 
-            tree.test();
+            // Un-comment to see nodes and their Right/ Left values
+            // tree.test();
         }   // end main while() loop
-
     }   // end main()
 
 
