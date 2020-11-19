@@ -1,6 +1,5 @@
 package io.github.cfrank95;
 
-import java.io.*;
 import java.util.Scanner;
 
 public class TreeDriver {
